@@ -14,11 +14,6 @@ export default function TabLayout() {
           <Ionicons name={focused ? 'map-sharp' : 'map-outline'} color={color} size={24} />
         )
       }} />
-      <Tabs.Screen name="notification" options={{
-        title: 'Notification', tabBarIcon: ({ color, focused }) => (
-          <Ionicons name={focused ? 'notifications-sharp' : 'notifications-outline'} color={color} size={24} />
-        )
-      }} />
     </Tabs>
   );
 }
