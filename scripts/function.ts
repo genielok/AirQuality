@@ -34,7 +34,7 @@ export function calculateOverallAQI(sensors: Sensor[]) {
     })
     let maxAQI = 0;
 
-    data.forEach(item => {
+    data?.forEach(item => {
         const aqi = calculateAQI(item.value, item.id);
         if (aqi !== null && aqi > maxAQI) {
             maxAQI = aqi; // 综合AQI取最大值
@@ -47,7 +47,7 @@ export function calculateOverallAQI(sensors: Sensor[]) {
 
 export function calculateProgressBar(pollutant: EPollution, value: number): { progress: number, color: string } {
     const ranges = AQI_BREAKPOINTS[pollutant];
-    for (let i = 0; i < ranges.length; i++) {
+    for (let i = 0; i < ranges?.length; i++) {
         if (value >= ranges[i].low && value <= ranges[i].high) {
             const progress = ((value - ranges[i].low) / (ranges[i].high - ranges[i].low))
             return {
@@ -57,6 +57,33 @@ export function calculateProgressBar(pollutant: EPollution, value: number): { pr
         }
     }
     // 如果不在任何范围内，返回 0% 或 100%
-    return { progress: value < ranges[0].low ? 0 : 100, color: '#000000' }
+    return { progress: value < ranges?.[0].low ? 0 : 100, color: '#000000' }
 }
 
+
+export function timeAgo(inputTime: string | Date): string {
+    const now = new Date();
+    const inputDate = new Date(inputTime); // 支持 string 或 Date 类型输入
+    const diffInSeconds = Math.floor((now.getTime() - inputDate.getTime()) / 1000); // 计算时间差（秒）
+
+    if (diffInSeconds < 60) {
+        return `${diffInSeconds} second${diffInSeconds > 1 ? "s" : ""} ago`;
+    } else if (diffInSeconds < 3600) {
+        const minutes = Math.floor(diffInSeconds / 60);
+        return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+    } else if (diffInSeconds < 86400) {
+        const hours = Math.floor(diffInSeconds / 3600);
+        return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+    } else {
+        const days = Math.floor(diffInSeconds / 86400);
+        return `${days} day${days > 1 ? "s" : ""} ago`;
+    }
+}
+
+export function daysAgo(inputTime: string | Date): number {
+    const now = new Date();
+    const inputDate = new Date(inputTime); // 支持 string 或 Date 类型输入
+    const diffInSeconds = Math.floor((now.getTime() - inputDate.getTime()) / 1000); // 计算时间差（秒）
+    const days = Math.floor(diffInSeconds / 86400);
+    return days
+}

@@ -10,7 +10,7 @@ interface PollutionInfoProps {
 interface PollutionItem {
     id: number,
     name: string,
-    value: number,
+    value: string,
     progress: number,
     color: string
 }
@@ -27,7 +27,7 @@ const PollutionInfo = (props: PollutionInfoProps) => {
                 const pollution = {
                     id: item.parameter.id,
                     name: item.parameter.displayName,
-                    value: item.latest.value,
+                    value: item.latest.value.toFixed(1),
                     ...pollutionProgress
                 }
                 result.push(pollution)
@@ -42,9 +42,11 @@ const PollutionInfo = (props: PollutionInfoProps) => {
                 {pollutionData.map((item, index) => {
                     return (
                         <View style={styles.column} key={index}>
-                            <Text style={styles.name}>{item.name}</Text>
-                            <Text style={styles.value}>{item.value}</Text>
-                            <Progress.Bar progress={item.progress} width={80} borderWidth={0} height={8} unfilledColor='#E7E7E7' color={item.color} />
+                            <View style={{ margin: 10 }}>
+                                <Text style={styles.name}>{item.name}</Text>
+                                <Text style={styles.value}>{item.value}</Text>
+                                <Progress.Bar progress={item.progress} width={80} borderWidth={0} height={8} unfilledColor='#E7E7E7' color={item.color} />
+                            </View>
                         </View>
                     );
                 })}
@@ -58,15 +60,18 @@ export default PollutionInfo
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#fff',
-        borderRadius: 30
+        borderRadius: 30,
+        paddingVertical: 20,
     },
     boxContainer: {
+        display: 'flex',
         flexDirection: "row", // 水平排列
-        justifyContent: "space-between", // 子元素之间平分空间
-        padding: 20,
+        justifyContent: 'space-around', // 子元素之间平分空间
+        flexWrap: 'wrap',
+        maxHeight: 200
     },
     column: {
-        flex: 1, // 每列均分
+        width: 130, // 每列均分
         marginHorizontal: 5, // 每列之间留一些间距
         justifyContent: "center", // 垂直居中对齐
     },
